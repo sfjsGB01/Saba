@@ -1,0 +1,4 @@
+---
+- name: Deploy the new WAR file to target servers
+  
+  copy: src=/var/lib/jenkins/workspace/Demo-Maven-Project/target/HelloWorld-Maven.war dest=/home/ansible/tomcat/webapps

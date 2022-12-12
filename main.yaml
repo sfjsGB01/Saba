@@ -1,0 +1,5 @@
+---
+- hosts: all
+  roles:
+    - apache2_role
+  become: true
