@@ -1,0 +1,221 @@
+
+	in the new terminal type cqlsh
+------------------------------
+cqlsh>
+
+to verify the host and version
+------------------------------
+show host;
+show version;
+
+
+to view all the commands
+------------------------------
+cqlsh>help
+
+
+to view syntax for one of the command
+-------------------------------------
+cqlsh>help create_table
+
+
+to terminate from cqlsh
+------------------------
+exit
+
+
+1.Create a keyspace.
+-------------------
+CREATE KEYSPACE "training" WITH REPLICATION = { 'class' :
+'SimpleStrategy' , 'replication_factor' :3 };
+
+
+2.list all the keyspaces
+------------------------
+describe keyspaces;
+
+2.1 check the schema for keyspaces
+------------------------------------
+select * from system.schema_keyspaces;
+
+2.2 Alter schema for keyspaces
+------------------------------
+ALTER KEYSPACE "training" WITH REPLICATION = { 'class' :
+'SimpleStrategy' , 'replication_factor' :2};
+
+2.3 Drop the schema for key space
+------------------------------------
+drop keyspace <key space>
+
+3. to check the cluster
+-----------------------
+describe cluster;
+
+
+3. use the keyspace
+--------------------
+use training;
+
+
+4.1 create the table in the selected keyspace
+---------------------------------------------
+CREATE TABLE employee (
+empID int,
+first_name varchar,
+last_name varchar,
+salary int,
+deptID int,
+city varchar,
+PRIMARY KEY (empID));
+
+4.1.1 - Add and drop columns in a table
+---------------------------------------
+alter table employee1
+add email text;
+
+alter table employee1
+drop email;
+
+
+4.1.2 - To drop a table
+-----------------------
+drop table <table name>;
+
+4.1.3 to delete only data
+--------------------------
+truncate <table name>;
+
+4.2 create the table in the selected keyspace
+---------------------------------------------
+CREATE columnfamily customer (
+custID int,
+name varchar,
+address varchar,
+PRIMARY KEY (custID));
+
+
+5. To show tables in a keyspace
+---------------------------------
+use <keyspace>;
+describe tables;
+
+6. To check the schema of a table
+---------------------------------
+describe table <table_name>
+
+7. insert values into keyspace
+------------------------------
+insert into employee (empID, first_name, last_name, salary, deptID, city)
+values (101, 'Sanjay', 'Sharma', 30000, 10, 'Pune');
+
+insert into employee (empID, first_name, last_name, salary, deptID, city)
+values (105, 'Rahul1', 'Joshi', 35000, 10, 'Bangalore');
+
+insert into employee (empID, first_name, last_name, salary, deptID, city)
+values (105, 'Amit', 'Sinha', 27000, 10, 'Delhi');
+
+
+insert into employee (empID, first_name, last_name, salary, deptID, city)
+values (103, 'Amit', 'Sinha', 27000, 10, 'Delhi');
+
+8. select statement for table
+-----------------------------
+select * from employee;
+
+8.1 to know the timestamp of each column (except for primary key)
+-----------------------------------------------------------------
+select empid, first_name, writetime(first_name) from employee;
+
+
+9. Capture commmand
+--------------------
+capture 'outputfile2'
+select * from employee;
+
+--Open a new terminal
+
+open the file outpufile in word
+
+capture off;
+
+
+10. Expand command
+------------------
+expand on;
+select * from employee;
+expand off;
+
+
+
+11.copy To and From a local csv file
+-----------------------------------
+
+CREATE table customer (
+custID varchar,
+firstname varchar,
+lastname varchar,
+age varchar,
+profession varchar,
+PRIMARY KEY (custID));
+
+copy student_master to 'myfile';
+
+copy customer from 'custs.txt';
+
+
+12. To execute commands in a batch file
+---------------------------------------
+source 'inputfile.txt';
+
+
+13. batch commands for insert, update and delete
+-------------------------------------------------
+begin batch
+update student_master set address = 'Bangalore' where id=102;
+update student_master set address = 'Hyd' where id=102;
+update student_master set address = 'Delhi' where id=102;
+apply batch;
+
+
+
+
+14. Update and delete command
+-------------------------------
+update student_master set address="Pune" where ID = 102;
+
+delete from student_master where id = 101;
+	
+locations  Details	
+15. Add a new column
+-----------------------------
+ALTER TABLE student_master ADD state varchar;
+
+
+15. To increase timeout values
+cqlsh --request-timeout=6000
+
+create table txn(
+cust_id int,
+product text,
+txn_id int,
+amt double,
+category text,
+city text,
+spendby text,
+state text,
+txn_dt text,
+PRIMARY KEY (cust_id, product,txn_id));
+
+//to provide header in sheet and ignore in command copy. 
+copy txn from 'C:/Users/sfjbs/Downloads/txns2.csv' with HEADER=TRUE;
+
+//Capture the output and copy into file and later capture off.
+capture 'c:/cassandra/outputfile'
+ 
+select * from employee where empid = 105;
+capture off
+
+//To see data in vertical order
+expand on
+select * from employee;
+expand off
